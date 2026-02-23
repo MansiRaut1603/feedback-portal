@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import axios from "axios";
+const API=import.meta.env.VITE_API_URL;
 
 function App() {
   const [form, setForm] = useState({
@@ -14,7 +15,7 @@ function App() {
   const [feedbacks, setFeedbacks] = useState([]);
 
   const fetchFeedbacks = async () => {
-    const res = await axios.get("http://localhost:5000/api/feedback");
+    const res = await axios.get('${API}/api/feedback');
     setFeedbacks(res.data);
   };
 
@@ -24,13 +25,13 @@ function App() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    await axios.post("http://localhost:5000/api/feedback", form);
+    await axios.post('${API}/api/feedback', form);
     setForm({ name: "", email: "", message: "", rating: 5 });
     fetchFeedbacks();
   };
 
   const handleDelete = async (id) => {
-    await axios.delete(`http://localhost:5000/api/feedback/${id}`);
+    await axios.delete(`'${API}/api/feedback'${id}`);
     fetchFeedbacks();
   };
 
