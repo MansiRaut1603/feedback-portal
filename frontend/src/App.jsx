@@ -2,38 +2,56 @@
 
 import { useState, useEffect } from "react";
 import axios from "axios";
-const API=import.meta.env.VITE_API_URL;
 
-function App() {
-  const [form, setForm] = useState({
-    name: "",
-    email: "",
-    message: "",
-    rating: 5,
-  });
+const API = import.meta.env.VITE_API_URL;
 
-  const [feedbacks, setFeedbacks] = useState([]);
+const fetchFeedbacks = async () => {
+  const res = await axios.get(`${API}/api/feedback`);
+  setFeedbacks(res.data);
+};
 
-  const fetchFeedbacks = async () => {
-    const res = await axios.get('${API}/api/feedback');
-    setFeedbacks(res.data);
-  };
+const handleSubmit = async (e) => {
+  e.preventDefault();
+  await axios.post(`${API}/api/feedback`, form);
+  setForm({ name: "", email: "", message: "", rating: 5 });
+  fetchFeedbacks();
+};
 
-  useEffect(() => {
-    fetchFeedbacks();
-  }, []);
+const handleDelete = async (id) => {
+  await axios.delete(`${API}/api/feedback/${id}`);
+  fetchFeedbacks();
+};
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    await axios.post('${API}/api/feedback', form);
-    setForm({ name: "", email: "", message: "", rating: 5 });
-    fetchFeedbacks();
-  };
+// function App() {
+//   const [form, setForm] = useState({
+//     name: "",
+//     email: "",
+//     message: "",
+//     rating: 5,
+//   });
 
-  const handleDelete = async (id) => {
-    await axios.delete(`'${API}/api/feedback'${id}`);
-    fetchFeedbacks();
-  };
+//   const [feedbacks, setFeedbacks] = useState([]);
+
+//   const fetchFeedbacks = async () => {
+//     const res = await axios.get('${API}/api/feedback');
+//     setFeedbacks(res.data);
+//   };
+
+//   useEffect(() => {
+//     fetchFeedbacks();
+//   }, []);
+
+//   const handleSubmit = async (e) => {
+//     e.preventDefault();
+//     await axios.post('${API}/api/feedback', form);
+//     setForm({ name: "", email: "", message: "", rating: 5 });
+//     fetchFeedbacks();
+//   };
+
+//   const handleDelete = async (id) => {
+//     await axios.delete(`'${API}/api/feedback'${id}`);
+//     fetchFeedbacks();
+//   };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-pink-400 via-purple-500 to-indigo-600 p-8">
